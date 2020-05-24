@@ -37,7 +37,7 @@ copy_coverart() {
 	COVERIMG=`dirname "$FILE"`/cover.jpg
 
 	# Return early if image does not need to be updated.
-	(! [ -f "$COVERIMG" ] || [ -f "$COVER_PATH" ] && [ -f "$COVERIMG" ] && [ `md5sum $COVER_PATH` = `md5sum $COVERIMG` ]) && return 0
+	(! [ -f "$COVERIMG" ] || [ -f "$COVER_PATH" ] && [ -f "$COVERIMG" ] && [ "$(md5sum "$COVER_PATH")" = "$(md5sum "$COVERIMG")" ]) && return 0
 
 	# Do a copy and swap, to avoid race conditions corrupting the image.
 	TEMP=`mktemp`
@@ -46,7 +46,6 @@ copy_coverart() {
 }
 
 update() {
-	kill $MPC_PID
 	copy_coverart
 	update_screen
 }
@@ -58,5 +57,5 @@ do
 	update
 	mpc current --wait &
 	MPC_PID=$!
-	wait $MPC_PID
+	wait $MPC_PID || kill $MPC_PID
 done
