@@ -34,7 +34,11 @@ update_screen() {
 copy_coverart() {
 	FILE="$MUSICDIR"`mpc current --format='%file%'`
 	COVERIMG=`dirname "$FILE"`/cover.jpg
-	cp "$COVERIMG" /tmp/cover.jpg
+
+	# Do a copy and swap, to avoid race conditions corrupting the image.
+	TEMP=`mktemp`
+	cp "$COVERIMG" $TEMP
+	mv $TEMP /tmp/cover.jpg
 }
 
 update() {
