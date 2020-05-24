@@ -2,6 +2,7 @@
 
 MUSICDIR=~/media/
 HTMLPATH=/tmp/mpdinfo.htm
+COVER_PATH=/tmp/cover.jpg
 
 update_screen() {
 	clear
@@ -38,7 +39,7 @@ copy_coverart() {
 	# Do a copy and swap, to avoid race conditions corrupting the image.
 	TEMP=`mktemp`
 	cp "$COVERIMG" $TEMP
-	mv $TEMP /tmp/cover.jpg
+	mv $TEMP "$COVER_PATH"
 }
 
 update() {
